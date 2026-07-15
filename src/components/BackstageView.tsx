@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useWastelandState } from '../state/useWastelandState';
 import { States } from '../state/WastelandState';
 
-type TileType = 'EMPTY' | 'CRATE' | 'STAGEHAND' | 'DRESSING_ROOM';
+type TileType = 'EMPTY' | 'CRATE' | 'STAGEHAND' | 'DRESSING_ROOM' | 'ROLLER_GRILL' | 'TRASH_CAN';
 
 interface MapTile {
   type: TileType;
@@ -19,8 +19,8 @@ const initialLayout: string[] = [
   'E E E C E E E E E E E D',
   'E C E C E C C C C C E E',
   'E C E E E C E E E C E C',
-  'E C C C E C E C E C E C',
-  'E E E S E E E C E E E C',
+  'E C C C E C E C T C E C',
+  'E E E S R E E C E E E C',
   'C C E C C C C C C C E C',
   'E E E E E E E S E E E E',
   'E C C C C C C C C C C E',
@@ -37,6 +37,8 @@ const parseLayout = (layout: string[]): MapTile[][] => {
         case 'C': return { type: 'CRATE' };
         case 'S': return { type: 'STAGEHAND' };
         case 'D': return { type: 'DRESSING_ROOM' };
+        case 'R': return { type: 'ROLLER_GRILL' };
+        case 'T': return { type: 'TRASH_CAN' };
         default: return { type: 'EMPTY' };
       }
     })
@@ -48,8 +50,11 @@ export const BackstageView: React.FC = () => {
   const [playerPos, setPlayerPos] = useState({ x: 0, y: 11 }); // Phoenix starts bottom-left
   const [map] = useState<MapTile[][]>(parseLayout(initialLayout));
   const [dialog, setDialog] = useState<string | null>(null);
+  const [pendingTransition, setPendingTransition] = useState<boolean>(false);
 
   const movePlayer = React.useCallback((dx: number, dy: number) => {
+    if (dialog) return; // Prevent movement while dialog is open
+
     setDialog(null); // clear dialog on any move attempt
 
     const nextX = playerPos.x + dx;
@@ -71,16 +76,41 @@ export const BackstageView: React.FC = () => {
       return; // blocked
     }
 
+    if (nextTile.type === 'ROLLER_GRILL') {
+      setDialog("You ate the Expired Kwik Trip Roller Grill! Tastes like rancid sulfur and neon dye. HP restored... maybe?");
+      return; // blocked
+    }
+
+    if (nextTile.type === 'TRASH_CAN') {
+      setDialog("You rummaged through the Trash Can and found... a Stale Glazer! It's as hard as concrete. Added to your nonexistent inventory!");
+      return; // blocked
+    }
+
     // Move player
     setPlayerPos({ x: nextX, y: nextY });
 
     if (nextTile.type === 'DRESSING_ROOM') {
-      transitionTo(States.YMCA_GALA);
+      setDialog("Phoenix squeezed into the sparkling pink pop-diva dress!");
+      setPendingTransition(true);
     }
-  }, [playerPos, map, transitionTo]);
+  }, [playerPos, map, transitionTo, dialog, pendingTransition]);
+
+  const dismissDialog = React.useCallback(() => {
+    if (dialog) {
+      if (pendingTransition) {
+        transitionTo(States.YMCA_GALA);
+      } else {
+        setDialog(null);
+      }
+    }
+  }, [dialog, pendingTransition, transitionTo]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (dialog && (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape')) {
+        dismissDialog();
+        return;
+      }
       switch (e.key) {
         case 'ArrowUp':
         case 'w':
@@ -107,7 +137,7 @@ export const BackstageView: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [movePlayer]);
+  }, [movePlayer, dialog, dismissDialog]);
 
   return (
     <div className="relative w-full h-full min-h-screen bg-[#121214] flex items-center justify-center overflow-hidden">
@@ -129,6 +159,8 @@ export const BackstageView: React.FC = () => {
                 {/* Floor rendering (empty by default) */}
                 {tile.type === 'CRATE' && <span>📦</span>}
                 {tile.type === 'STAGEHAND' && <span>👥</span>}
+                {tile.type === 'ROLLER_GRILL' && <span>🌭</span>}
+                {tile.type === 'TRASH_CAN' && <span>🗑️</span>}
                 {tile.type === 'DRESSING_ROOM' && (
                   <div className="absolute inset-0 border-[3px] border-[#FF007F] animate-pulse pointer-events-none" />
                 )}
@@ -153,8 +185,13 @@ export const BackstageView: React.FC = () => {
 
         {/* Dialog Box overlay */}
         {dialog && (
-          <div className="absolute bottom-4 left-4 right-4 bg-black border-4 border-white p-4 z-10 font-bold text-white shadow-lg">
-            {dialog}
+          <div
+            className="absolute bottom-4 left-4 right-4 bg-black border-4 border-white p-4 z-10 font-bold text-white shadow-lg cursor-pointer"
+            style={{ fontFamily: 'var(--font-press-start)' }}
+            onClick={dismissDialog}
+          >
+            <p className="text-sm leading-relaxed">{dialog}</p>
+            <div className="absolute bottom-2 right-2 animate-bounce">▼</div>
           </div>
         )}
       </div>
