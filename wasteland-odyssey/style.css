@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+  --neon-pink: #ff00ff;
+  --neon-green: #00ff00;
+  --cyber-black: #050505;
+  --hud-text: var(--neon-green);
+  --hud-border: var(--neon-pink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--cyber-black);
+  overflow: hidden;
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--hud-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-container {
+  position: relative;
+  /* Match the 480x270 aspect ratio */
+  width: 100vw;
+  max-width: calc(100vh * (480 / 270));
+  height: 100vh;
+  max-height: calc(100vw * (270 / 480));
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  image-rendering: pixelated;
+  z-index: 1;
+}
+
+#hud-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none; /* Let clicks pass through to canvas when needed */
+  padding: 20px;
+
+  /* CRT Effects */
+  background: linear-gradient(
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.25) 50%),
+      linear-gradient(90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+/* Add a subtle flicker animation to the overlay */
+@keyframes flicker {
+  0% { opacity: 0.95; }
+  5% { opacity: 0.85; }
+  10% { opacity: 0.95; }
+  15% { opacity: 1; }
+  50% { opacity: 0.98; }
+  100% { opacity: 1; }
+}
+
+#hud-overlay {
+  animation: flicker 4s infinite;
+}
+
+.hud-panel {
+  background-color: rgba(5, 5, 5, 0.85);
+  border: 2px solid var(--hud-border);
+  box-shadow: 0 0 10px var(--hud-border), inset 0 0 10px var(--hud-border);
+  padding: 15px;
+  pointer-events: auto; /* Allow interactions on panels */
+}
+
+.glitch-text {
+  text-shadow: 2px 0 var(--neon-pink), -2px 0 cyan;
+}
+
+h1, h2, h3 {
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+button.punk-btn {
+  background: transparent;
+  color: var(--neon-green);
+  border: 1px solid var(--neon-green);
+  padding: 10px 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  box-shadow: 0 0 5px var(--neon-green);
+}
+
+button.punk-btn:hover {
+  background: var(--neon-green);
+  color: var(--cyber-black);
+  box-shadow: 0 0 15px var(--neon-green);
+}
+
+button.punk-btn:active {
+  transform: scale(0.98);
+}
