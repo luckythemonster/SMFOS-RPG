@@ -1,8 +1,6 @@
 import { createContext } from 'react';
 
-export type States = 'BACKSTAGE' | 'YMCA_GALA' | 'RAFTER_DASH' | 'COMBAT_SCREEN' | 'AIRSHIP_HEIST_OUTRO';
-
-export const GameStates: Record<States, States> = {
+export const States = {
   BACKSTAGE: 'BACKSTAGE',
   YMCA_GALA: 'YMCA_GALA',
   RAFTER_DASH: 'RAFTER_DASH',
@@ -10,9 +8,11 @@ export const GameStates: Record<States, States> = {
   AIRSHIP_HEIST_OUTRO: 'AIRSHIP_HEIST_OUTRO'
 } as const;
 
+export type State = typeof States[keyof typeof States];
+
 interface WastelandContextType {
-  currentState: States;
-  transitionTo: (newState: States) => void;
+  currentState: State;
+  transitionTo: (newState: State) => void;
 }
 
 export const WastelandContext = createContext<WastelandContextType | undefined>(undefined);

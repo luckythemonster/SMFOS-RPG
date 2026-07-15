@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameStates } from '../state/WastelandState';
+import { States } from '../state/WastelandState';
 import { useWastelandState } from '../state/useWastelandState';
 
 export const Backstage: React.FC = () => {
@@ -13,7 +13,7 @@ export const Backstage: React.FC = () => {
       </p>
       <button
         className="btn-arcade-green"
-        onClick={() => transitionTo(GameStates.YMCA_GALA)}
+        onClick={() => transitionTo(States.YMCA_GALA)}
       >
         Next Stage
       </button>

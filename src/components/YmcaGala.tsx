@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameStates } from '../state/WastelandState';
+import { States } from '../state/WastelandState';
 import { useWastelandState } from '../state/useWastelandState';
 
 export const YmcaGala: React.FC = () => {
@@ -13,7 +13,7 @@ export const YmcaGala: React.FC = () => {
       </p>
       <button
         className="btn-arcade-magenta"
-        onClick={() => transitionTo(GameStates.RAFTER_DASH)}
+        onClick={() => transitionTo(States.RAFTER_DASH)}
       >
         Next Stage
       </button>
