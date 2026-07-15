@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -6,6 +7,7 @@
   --color-warning-yellow: #FFD700;
   --color-wasteland-charcoal: #121214;
   --color-radioactive-purple: #8A2BE2;
+  --font-press-start: 'Press Start 2P', cursive;
 }
 
 @layer components {
