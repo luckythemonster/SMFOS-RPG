@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameStates } from '../state/WastelandState';
+import { States } from '../state/WastelandState';
 import { useWastelandState } from '../state/useWastelandState';
 
 export const CombatScreen: React.FC = () => {
@@ -13,7 +13,7 @@ export const CombatScreen: React.FC = () => {
       </p>
       <button
         className="btn-arcade-cyan"
-        onClick={() => transitionTo(GameStates.AIRSHIP_HEIST_OUTRO)}
+        onClick={() => transitionTo(States.AIRSHIP_HEIST_OUTRO)}
       >
         Next Stage
       </button>

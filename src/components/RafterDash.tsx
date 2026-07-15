@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameStates } from '../state/WastelandState';
+import { States } from '../state/WastelandState';
 import { useWastelandState } from '../state/useWastelandState';
 
 export const RafterDash: React.FC = () => {
@@ -13,7 +13,7 @@ export const RafterDash: React.FC = () => {
       </p>
       <button
         className="btn-arcade-yellow"
-        onClick={() => transitionTo(GameStates.COMBAT_SCREEN)}
+        onClick={() => transitionTo(States.COMBAT_SCREEN)}
       >
         Next Stage
       </button>
