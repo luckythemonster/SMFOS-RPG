@@ -234,3 +234,54 @@ body::before {
   from { background: var(--neon-pink); color: var(--cyber-black); border-color: var(--neon-green); }
   to { background: var(--neon-green); color: var(--cyber-black); border-color: var(--neon-pink); box-shadow: 0 0 30px var(--neon-green); }
 }
+
+/* Timer Overlay */
+.timer-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: var(--cyber-black);
+  border: 3px solid var(--neon-pink);
+  padding: 10px 20px;
+  box-shadow: 0 0 10px var(--neon-pink), inset 0 0 5px var(--neon-pink);
+  pointer-events: none;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s;
+}
+
+.timer-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.timer-label {
+  color: var(--neon-green);
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-right: 10px;
+  text-shadow: 0 0 5px var(--neon-green);
+}
+
+.timer-text {
+  color: var(--neon-pink);
+  font-weight: bold;
+  font-size: 2rem;
+  text-shadow: 0 0 5px var(--neon-pink);
+}
+
+.timer-danger {
+  animation: flashDanger 0.5s infinite alternate;
+}
+
+@keyframes flashDanger {
+  from {
+    color: white;
+    text-shadow: 0 0 10px white;
+  }
+  to {
+    color: red;
+    text-shadow: 0 0 20px red, 0 0 10px red;
+  }
+}
