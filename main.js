@@ -5,6 +5,9 @@ import { backstageInit, backstageUpdate, backstageUpdatePost, backstageRender, b
 import { initGalaMinigame, teardownGalaMinigame, galaUpdate } from './galaMinigame.js';
 import { initGalaCanvas, teardownGalaCanvas, galaCanvasUpdate, galaCanvasRender } from './galaCanvas.js';
 import { initRafters, updateRafters, renderRafters, teardownRafters } from './rafterScramble.js';
+import { initCombat, teardownCombat, updateCombat, renderCombat } from './combatEngine.js';
+import { initEscape, teardownEscape, updateEscape, renderEscape } from './airshipEscape.js';
+
 
 // LittleJS initialization parameters
 const canvasWidth = 480;
@@ -24,6 +27,10 @@ function gameInit() {
         initGalaCanvas();
     } else if (stateManager.currentState === 'RAFTERS') {
         initRafters();
+    } else if (stateManager.currentState === 'SHOWDOWN') {
+        initCombat();
+    } else if (stateManager.currentState === 'ESCAPE') {
+        initEscape();
     }
 
     previousState = stateManager.currentState;
@@ -36,6 +43,10 @@ function gameInit() {
             teardownGalaCanvas();
         } else if (previousState === 'RAFTERS') {
             teardownRafters();
+        } else if (previousState === 'SHOWDOWN') {
+            if (typeof teardownCombat === 'function') teardownCombat();
+        } else if (previousState === 'ESCAPE') {
+            if (typeof teardownEscape === 'function') teardownEscape();
         }
 
         // Init new
@@ -44,6 +55,10 @@ function gameInit() {
             initGalaCanvas();
         } else if (newState === 'RAFTERS') {
             initRafters();
+        } else if (newState === 'SHOWDOWN') {
+            initCombat();
+        } else if (newState === 'ESCAPE') {
+            initEscape();
         }
 
         previousState = newState;
@@ -58,6 +73,10 @@ function gameUpdate() {
         galaCanvasUpdate();
     } else if (stateManager.currentState === 'RAFTERS') {
         updateRafters();
+    } else if (stateManager.currentState === 'SHOWDOWN') {
+        if (typeof updateCombat === 'function') updateCombat();
+    } else if (stateManager.currentState === 'ESCAPE') {
+        updateEscape();
     }
 }
 
@@ -74,6 +93,10 @@ function gameRender() {
         galaCanvasRender();
     } else if (stateManager.currentState === 'RAFTERS') {
         renderRafters();
+    } else if (stateManager.currentState === 'SHOWDOWN') {
+        if (typeof renderCombat === 'function') renderCombat();
+    } else if (stateManager.currentState === 'ESCAPE') {
+        renderEscape();
     }
 }
 
