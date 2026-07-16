@@ -9,7 +9,15 @@
   <body>
     <!-- DOM Overlay for UI and Dialogues -->
     <div id="domOverlay" class="overlay-container">
+
+      <!-- Timer UI -->
+      <div id="timerContainer" class="timer-container hidden">
+        <span class="timer-label">TIME: </span>
+        <span id="timerText" class="timer-text">60</span>
+      </div>
+
       <div id="hud-overlay"></div>
+
       <div id="dialogueBox" class="dialogue-box hidden">
         <span id="dialogueSender" class="dialogue-sender"></span>
         <p id="dialogueText" class="dialogue-text"></p>
